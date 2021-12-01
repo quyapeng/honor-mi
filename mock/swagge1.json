@@ -1,0 +1,2783 @@
+{
+  "openapi": "3.0.1",
+  "info": { "title": "UAA", "description": "用户和鉴权", "version": "1.0.0" },
+  "servers": [{ "url": "/login" }],
+  "security": [{ "Qlion-OAuth2": [] }],
+  "tags": [
+    { "name": "用户管理", "description": "用户管理相关服务" },
+    { "name": "菜单", "description": "菜单接口" },
+    { "name": "用户服务", "description": "教师、学生用户相关服务" }
+  ],
+  "paths": {
+    "/user/query/refresh/login/time/{userId}": {
+      "put": {
+        "tags": ["用户服务"],
+        "summary": "更新登录时间",
+        "description": "更新登录时间",
+        "operationId": "refreshLoginTime",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/client/admin": {
+      "put": {
+        "tags": ["用户服务"],
+        "summary": "修改校管理员用户",
+        "description": "修改校管理员用户",
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserEditVM" }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      },
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "新增校管理员用户",
+        "description": "新增校管理员用户",
+        "operationId": "save",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserAddVM" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "integer", "format": "int32" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin": {
+      "put": {
+        "tags": ["用户管理"],
+        "summary": "修改用户",
+        "description": "修改用户",
+        "operationId": "update_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserEditVM" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ResultT" } }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "新增用户",
+        "description": "新增用户",
+        "operationId": "add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserAddVM" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ResultTInteger" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin/{userId}/role": {
+      "put": {
+        "tags": ["用户管理"],
+        "summary": "设置用户角色",
+        "description": "修改角色",
+        "operationId": "setUserRole",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": { "type": "integer", "format": "int32" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ResultT" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin/{id}/password": {
+      "put": {
+        "tags": ["用户管理"],
+        "summary": "验证原密码并修改密码",
+        "description": "验证原密码并修改密码",
+        "operationId": "setUserPass",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "oldPwd",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "newPwd",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ResultT" } }
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}/menus": {
+      "put": {
+        "tags": ["角色管理"],
+        "summary": "根据ID修改角色菜单",
+        "description": "传入新的菜单列表",
+        "operationId": "updateMenusById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/MenuVo" }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Role" } }
+            }
+          }
+        }
+      }
+    },
+    "/dict": {
+      "get": {
+        "tags": ["字典"],
+        "summary": "分页查询所有",
+        "operationId": "getAll_3",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/Pageable" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/BizRespPageDict" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["字典"],
+        "operationId": "update_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Dict" }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      },
+      "post": {
+        "tags": ["字典"],
+        "summary": "新增字典",
+        "operationId": "add_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Dict" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/BizRespDict" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dict/item": {
+      "get": {
+        "tags": ["字典项"],
+        "summary": "分页查询所有",
+        "operationId": "getAll_4",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/Pageable" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/BizRespPageDictItem" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["字典项"],
+        "operationId": "update_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Dict" }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      },
+      "post": {
+        "tags": ["字典项"],
+        "summary": "新增字典项",
+        "operationId": "add_4",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DictItem" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/BizRespDictItem" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/refresh/login/time": {
+      "post": {
+        "tags": ["用户服务"],
+        "operationId": "refreshLoginTime_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": { "type": "integer", "format": "int32" }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/query/update/base/info": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "修改用户基本信息",
+        "description": "修改用户基本信息",
+        "operationId": "updateUserBase",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserBase" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "integer", "format": "int32" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/name/bath": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "批量根据用户Id查询姓名",
+        "description": "批量根据用户Id查询姓名",
+        "operationId": "queryNameByUserIds",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": { "type": "integer", "format": "int32" }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UserIdNameVo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/client/teacher/edit": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "编辑教师",
+        "description": "编辑教师,返回用户ID",
+        "operationId": "editTeacher",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TeacherBo" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "integer", "format": "int32" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/client/teacher/delete": {
+      "post": {
+        "tags": ["用户服务"],
+        "operationId": "deleteTeacher",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": { "type": "integer", "format": "int32" }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/client/student/edit": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "编辑学生",
+        "description": "编辑学生,返回用户ID",
+        "operationId": "editStudent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/StudentBo" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "integer", "format": "int32" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/client/student/delete": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "删除学生(异常)",
+        "description": "删除学生(异常)",
+        "operationId": "deleteStudent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": { "type": "integer", "format": "int32" }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/client/query/param/list": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "按条件查询学生、教师",
+        "description": "按条件查询学生、教师",
+        "operationId": "querySchoolUserByList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SchoolQueryBo" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/SchoolUserVo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/client/admin/{userId}/resetPwd": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "重置密码",
+        "description": "重置密码",
+        "operationId": "resetPwd",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/admin/{id}/resetPwd": {
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "重置密码",
+        "description": "重置密码",
+        "operationId": "resetPwdById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ResultT" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin/update/password": {
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "根据手机号直接修改密码",
+        "description": "验证验证码并根据手机号修改密码",
+        "operationId": "updatePwdByPhone",
+        "parameters": [
+          {
+            "name": "mobilePhone",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "smsCode",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "newPwd",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ResultT" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin/query": {
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "查询用户列表",
+        "description": "查询支持参数，分页",
+        "operationId": "getAllUsers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserPageDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultTPageUserPageVo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role": {
+      "get": {
+        "tags": ["角色管理"],
+        "summary": "根据条件查询角色列表",
+        "operationId": "getAllWithPage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "ID", "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "角色名称", "type": "string" }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "角色代码", "type": "string" }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "角色类型",
+              "type": "string",
+              "description": "SYSTEM: 系统角色, BUSINESS: 业务角色",
+              "enum": ["SYSTEM", "BUSINESS"]
+            }
+          },
+          {
+            "name": "accPrefix",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "角色前缀代码", "type": "string" }
+          },
+          {
+            "name": "weight",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "角色权重（当用户拥有多个角色时，根据权重较大的选择相应的前缀代码）",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "subRoles",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "下级角色",
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/角色" }
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "状态",
+              "type": "string",
+              "description": "PENDING: 待激活, NORMAL: 正常, SUSPENDED: 已禁用 (默认选中NORMAL)",
+              "enum": ["PENDING", "NORMAL", "SUSPENDED"]
+            }
+          },
+          {
+            "name": "menus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "角色菜单",
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/MenuVo" }
+            }
+          },
+          {
+            "name": "remark",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "备注", "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Zero-based page index (0..N)",
+            "required": false,
+            "schema": { "minimum": 0, "type": "integer", "default": 0 }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The size of the page to be returned",
+            "required": false,
+            "schema": { "minimum": 1, "type": "integer", "default": 15 }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Page角色" } }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["角色管理"],
+        "summary": "增加角色",
+        "operationId": "add_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/角色" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Role" } }
+            }
+          }
+        }
+      }
+    },
+    "/menu": {
+      "get": {
+        "tags": ["菜单"],
+        "summary": "查询用户菜单",
+        "description": "返回用户配置的菜单列表",
+        "operationId": "getMyMenu",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Menu" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["菜单"],
+        "summary": "新增菜单",
+        "operationId": "add_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MenuVo" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Menu" } }
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}": {
+      "get": {
+        "tags": ["角色管理"],
+        "summary": "根据ID查询角色",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/角色" } }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["角色管理"],
+        "summary": "根据ID删除角色",
+        "operationId": "deleteById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "patch": {
+        "tags": ["角色管理"],
+        "summary": "更新Role(补丁更新)",
+        "description": "根据传输非null字段更新role",
+        "operationId": "patchRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/角色" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Role" } }
+            }
+          }
+        }
+      }
+    },
+    "/menu/{id}": {
+      "get": {
+        "tags": ["菜单"],
+        "summary": "根据ID查询菜单",
+        "operationId": "getAll_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Menu" } }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["菜单"],
+        "summary": "根据ID删除菜单",
+        "operationId": "deleteById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "patch": {
+        "tags": ["菜单"],
+        "summary": "更新菜单(补丁更新)",
+        "description": "根据客户端传输非null字段做合并更新操作",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MenuVo" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/Menu" } }
+            }
+          }
+        }
+      }
+    },
+    "/dict/{id}": {
+      "get": {
+        "tags": ["字典"],
+        "summary": "根据ID查询",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/BizRespDict" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["字典"],
+        "summary": "根据ID删除字典",
+        "operationId": "deleteById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "patch": {
+        "tags": ["字典"],
+        "operationId": "patchById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/dict/item/{id}": {
+      "get": {
+        "tags": ["字典项"],
+        "summary": "根据ID查询",
+        "operationId": "getById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/BizRespDictItem" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["字典项"],
+        "summary": "根据ID删除字典项",
+        "operationId": "deleteById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "patch": {
+        "tags": ["字典项"],
+        "operationId": "patchById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/query/username/{username}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据用户名查询用户",
+        "description": "根据用户名查询用户",
+        "operationId": "findUserByName",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/SysUserBO" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/teacher/phone/{mobilePhone}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据手机号查询教师",
+        "description": "根据手机号查询教师",
+        "operationId": "queryTeacherByPhone",
+        "parameters": [
+          {
+            "name": "mobilePhone",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TeacherUserVo" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/teacher/openid/{openId}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据openId查询教师",
+        "description": "根据openId查询教师",
+        "operationId": "queryTeacherByOpenId",
+        "parameters": [
+          {
+            "name": "openId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TeacherUserVo" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/teacher/mobile/{mobile}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据手机号查询教师用户",
+        "description": "根据手机号查询教师用户",
+        "operationId": "findTeacherUserByMobile",
+        "parameters": [
+          {
+            "name": "mobile",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/SysUserBO" } }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/teacher/id/{userId}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据userId查询教师",
+        "description": "根据userId查询教师",
+        "operationId": "queryTeacherById",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/TeacherUserVo" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/student/phone/{mobilePhone}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据手机号查询学生",
+        "description": "根据手机号查询学生",
+        "operationId": "queryStudentByPhone",
+        "parameters": [
+          {
+            "name": "mobilePhone",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/StudentUserVo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/student/mobile/{mobile}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据手机号查询学生用户",
+        "description": "根据手机号查询学生用户",
+        "operationId": "findStudentUserByMobile",
+        "parameters": [
+          {
+            "name": "mobile",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ParentsUserBO" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/query/student/code/{studentCode}": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "根据学生编号查询学生",
+        "description": "根据学生编号查询学生",
+        "operationId": "findStudentByCode",
+        "parameters": [
+          {
+            "name": "studentCode",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/StudentUserVo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin/role/{role}": {
+      "get": {
+        "tags": ["用户管理"],
+        "summary": "根据角色编号查询用户",
+        "description": "根据角色编号查询用户",
+        "operationId": "findUserByRoleCode",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["school_adm", "agent", "teacher", "student", "parent"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ResultTListUser" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/admin/me": {
+      "get": {
+        "tags": ["用户管理"],
+        "summary": "用户登录",
+        "description": "用户登录",
+        "operationId": "getMyInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ResultTUserVO" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/bcrypt/{rawPass}": {
+      "get": {
+        "tags": ["test-endpoint"],
+        "operationId": "encode",
+        "parameters": [
+          {
+            "name": "rawPass",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "type": "string" } } }
+          }
+        }
+      }
+    },
+    "/role/all": {
+      "get": {
+        "tags": ["角色管理"],
+        "summary": "根据条件查询角色列表(不分页)",
+        "operationId": "getAll",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "ID", "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "角色名称", "type": "string" }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "角色代码", "type": "string" }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "角色类型",
+              "type": "string",
+              "description": "SYSTEM: 系统角色, BUSINESS: 业务角色",
+              "enum": ["SYSTEM", "BUSINESS"]
+            }
+          },
+          {
+            "name": "accPrefix",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "角色前缀代码", "type": "string" }
+          },
+          {
+            "name": "weight",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "角色权重（当用户拥有多个角色时，根据权重较大的选择相应的前缀代码）",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "subRoles",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "下级角色",
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/角色" }
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "状态",
+              "type": "string",
+              "description": "PENDING: 待激活, NORMAL: 正常, SUSPENDED: 已禁用 (默认选中NORMAL)",
+              "enum": ["PENDING", "NORMAL", "SUSPENDED"]
+            }
+          },
+          {
+            "name": "menus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "角色菜单",
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/MenuVo" }
+            }
+          },
+          {
+            "name": "remark",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "备注", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/角色" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menu/paged": {
+      "get": {
+        "tags": ["菜单"],
+        "summary": "分页查询菜单",
+        "description": "默认按增加时间倒叙排序",
+        "operationId": "getPage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "菜单ID",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "名称", "type": "string" }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "编号", "type": "string" }
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "父级ID",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "类型【菜单-MENU，权限-ACTION】",
+              "type": "string",
+              "enum": ["MENU", "ACTION"]
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "状态【】",
+              "type": "string",
+              "enum": ["ENABLED", "DISABLED"]
+            }
+          },
+          {
+            "name": "isDelete",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "是否删除【0-否，1-是】", "type": "boolean" }
+          },
+          {
+            "name": "isShow",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "是否展示【0-否，1-是】", "type": "boolean" }
+          },
+          {
+            "name": "isEdit",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "是否可编辑【0-否，1-是】", "type": "boolean" }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "property",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["ASC", "DESC"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/PageMenu" } }
+            }
+          }
+        }
+      }
+    },
+    "/menu/all": {
+      "get": {
+        "tags": ["菜单"],
+        "summary": "查询所有菜单",
+        "description": "默认按增加时间倒叙排序",
+        "operationId": "getAll_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "菜单ID",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "名称", "type": "string" }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "编号", "type": "string" }
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "父级ID",
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "类型【菜单-MENU，权限-ACTION】",
+              "type": "string",
+              "enum": ["MENU", "ACTION"]
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "title": "状态【】",
+              "type": "string",
+              "enum": ["ENABLED", "DISABLED"]
+            }
+          },
+          {
+            "name": "isDelete",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "是否删除【0-否，1-是】", "type": "boolean" }
+          },
+          {
+            "name": "isShow",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "是否展示【0-否，1-是】", "type": "boolean" }
+          },
+          {
+            "name": "isEdit",
+            "in": "query",
+            "required": false,
+            "schema": { "title": "是否可编辑【0-否，1-是】", "type": "boolean" }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "property",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["ASC", "DESC"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Menu" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/client/admin/delete/{userId}/{role}": {
+      "delete": {
+        "tags": ["用户服务"],
+        "summary": "根据ID删除用户",
+        "description": "根据ID删除用户",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/user/admin/delete/{id}": {
+      "delete": {
+        "tags": ["用户管理"],
+        "summary": "根据ID删除用户",
+        "description": "根据ID删除用户",
+        "operationId": "deleteById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ResultT" } }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token": {
+      "get": {
+        "tags": ["token-endpoint"],
+        "operationId": "getAccessToken",
+        "parameters": [
+          {
+            "name": "parameters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/OAuth2AccessToken" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["token-endpoint"],
+        "operationId": "postAccessToken",
+        "parameters": [
+          {
+            "name": "parameters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/OAuth2AccessToken" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/check_token": {
+      "post": {
+        "tags": ["check-token-endpoint"],
+        "operationId": "checkToken",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/authorize": {
+      "post": {
+        "tags": ["authorization-endpoint"],
+        "operationId": "approveOrDeny",
+        "parameters": [
+          {
+            "name": "approvalParameters",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/View" } }
+            }
+          }
+        }
+      }
+    },
+    "/introspect": {
+      "post": {
+        "tags": ["introspect-endpoint"],
+        "operationId": "introspect",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oauth/token_key": {
+      "get": {
+        "tags": ["token-key-endpoint"],
+        "operationId": "getKey",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/jwks.json": {
+      "get": {
+        "tags": ["jwk-set-endpoint"],
+        "operationId": "getKey_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserEditVM": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "realName": { "title": "姓名", "type": "string" },
+          "password": { "title": "密码", "type": "string" },
+          "mobile": { "title": "手机号", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "status": {
+            "title": "状态",
+            "type": "string",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "roleIds": {
+            "title": "角色ID集合",
+            "type": "array",
+            "items": {
+              "title": "角色ID集合",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "ResultT": {
+        "type": "object",
+        "properties": {
+          "code": { "title": "状态码", "type": "integer", "format": "int32" },
+          "msg": { "title": "提示信息", "type": "string" },
+          "data": { "type": "object" }
+        }
+      },
+      "MenuVo": {
+        "required": ["code", "name", "seq", "type"],
+        "type": "object",
+        "properties": {
+          "id": { "title": "主键id", "type": "integer", "format": "int32" },
+          "name": { "title": "名称", "type": "string" },
+          "code": { "title": "编号", "type": "string" },
+          "icon": { "title": "图标", "type": "string" },
+          "path": { "title": "链接", "type": "string" },
+          "seq": { "title": "排序", "type": "integer", "format": "int32" },
+          "parentId": {
+            "title": "父级菜单",
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "title": "类型【菜单-MENU，权限-ACTION】",
+            "type": "string",
+            "enum": ["MENU", "ACTION"]
+          },
+          "authority": { "title": "权限标识", "type": "string" },
+          "remark": { "title": "备注", "type": "string" },
+          "status": {
+            "title": "状态【enable-可用, disable-不可用】",
+            "type": "string",
+            "enum": ["ENABLED", "DISABLED"]
+          },
+          "isDelete": { "title": "是否删除【0-否，1-是】", "type": "boolean" },
+          "isShow": { "title": "是否展示【0-否，1-是】", "type": "boolean" },
+          "isEdit": { "title": "是否可编辑【0-否，1-是】", "type": "boolean" }
+        }
+      },
+      "Menu": {
+        "title": "菜单列表",
+        "type": "object",
+        "properties": {
+          "id": { "title": "主键id", "type": "integer", "format": "int32" },
+          "name": { "title": "名称", "type": "string" },
+          "code": { "title": "编号", "type": "string" },
+          "icon": { "title": "图标", "type": "string" },
+          "path": { "title": "链接", "type": "string" },
+          "seq": { "title": "排序", "type": "integer", "format": "int32" },
+          "parent": { "$ref": "#/components/schemas/Menu" },
+          "type": {
+            "title": "类型【菜单-MENU，权限-ACTION】",
+            "type": "string",
+            "enum": ["MENU", "ACTION"]
+          },
+          "authority": { "title": "权限标识", "type": "string" },
+          "remark": { "title": "备注", "type": "string" },
+          "status": {
+            "title": "状态【】",
+            "type": "string",
+            "enum": ["ENABLED", "DISABLED"]
+          },
+          "isDelete": { "title": "是否删除【0-否，1-是】", "type": "boolean" },
+          "isShow": { "title": "是否展示【0-否，1-是】", "type": "boolean" },
+          "isEdit": { "title": "是否可编辑【0-否，1-是】", "type": "boolean" },
+          "createUser": {
+            "title": "创建人",
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "title": "创建时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateUser": {
+            "title": "修改人",
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastModifiedTime": {
+            "title": "修改时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "subMenus": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Menu" }
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "name": { "title": "角色名称", "type": "string" },
+          "code": { "title": "角色代码", "type": "string" },
+          "accPrefix": { "title": "账号前缀", "type": "string" },
+          "type": {
+            "title": "角色类型(SYSTEM: 管理角色, BUSINESS: 业务角色)",
+            "type": "string",
+            "description": "管理角色可以后台创建，业务角色业务服务使用，只能指定业务模块创建，不支持后台用户管理模块创建",
+            "enum": ["SYSTEM", "BUSINESS"]
+          },
+          "weight": {
+            "title": "权重",
+            "type": "integer",
+            "description": "当用户拥有多个用户角色时，使用权重值高(weight值小)的定义用户编码",
+            "format": "int32"
+          },
+          "parent": { "$ref": "#/components/schemas/Role" },
+          "subRoles": {
+            "title": "子角色",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Role" }
+          },
+          "status": {
+            "title": "状态(PENDING: 待激活, NORAML: 正常, SUSPENDED: 已禁用)",
+            "type": "string",
+            "enum": ["PENDING", "NORMAL", "SUSPENDED"]
+          },
+          "remark": { "title": "备注", "type": "string" },
+          "menus": {
+            "title": "菜单列表",
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Menu" }
+          },
+          "createTime": {
+            "title": "创建时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedTime": {
+            "title": "最近更新时间",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Dict": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "type": { "title": "字典类型", "type": "string" },
+          "name": { "title": "字典名称", "type": "string" },
+          "desc": { "title": "字典说明", "type": "string" },
+          "createdTime": { "type": "string", "format": "date-time" },
+          "lastModifiedTime": { "type": "string", "format": "date-time" }
+        }
+      },
+      "UserBase": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "openId": { "title": "小程序OPENID", "type": "string" },
+          "status": {
+            "title": "状态【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "type": "string"
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "sex": {
+            "title": "性别【F-女，M-男】",
+            "type": "string",
+            "enum": ["F", "M"]
+          },
+          "birthday": {
+            "title": "出生日期[yyyy-MM-dd]",
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": { "title": "地址", "type": "string" }
+        }
+      },
+      "UserIdNameVo": {
+        "type": "object",
+        "properties": {
+          "userId": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "userCode": { "title": "用户编号", "type": "string" },
+          "userName": { "title": "用户名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" }
+        }
+      },
+      "TeacherBo": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "openId": { "title": "小程序OPENID", "type": "string" },
+          "status": {
+            "title": "状态【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "type": "string"
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "sex": {
+            "title": "性别【F-女，M-男】",
+            "type": "string",
+            "enum": ["F", "M"]
+          },
+          "birthday": {
+            "title": "出生日期[yyyy-MM-dd]",
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": { "title": "地址", "type": "string" },
+          "password": { "title": "密码", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" }
+        }
+      },
+      "StudentBo": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "openId": { "title": "小程序OPENID", "type": "string" },
+          "status": {
+            "title": "状态【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "type": "string"
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "sex": {
+            "title": "性别【F-女，M-男】",
+            "type": "string",
+            "enum": ["F", "M"]
+          },
+          "birthday": {
+            "title": "出生日期[yyyy-MM-dd]",
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": { "title": "地址", "type": "string" },
+          "phoneList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StudentPhone" }
+          }
+        }
+      },
+      "StudentPhone": {
+        "type": "object",
+        "properties": {
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "ownerName": { "title": "机主姓名", "type": "string" },
+          "relation": {
+            "title": "关系【father-父亲，mother-母亲】",
+            "type": "string",
+            "enum": ["FATHER", "MOTHER", "GRAND_FATHER", "GRAND_MOTHER"]
+          },
+          "isDelete": {
+            "title": "是否删除【0-否，1-是】",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SchoolQueryBo": {
+        "required": ["roleCode"],
+        "type": "object",
+        "properties": {
+          "roleCode": {
+            "title": "角色编号【ROLE_TEACHER-教师,ROLE_STUDENT-学生】",
+            "type": "string"
+          },
+          "phone": { "title": "手机号", "type": "string" },
+          "name": { "title": "姓名", "type": "string" },
+          "status": {
+            "title": "状态【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "type": "string"
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "userId": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "userIds": {
+            "title": "用户ID集合",
+            "type": "array",
+            "items": {
+              "title": "用户ID集合",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "SchoolUserVo": {
+        "type": "object",
+        "properties": {
+          "userId": { "title": "主键id", "type": "integer", "format": "int32" },
+          "userName": { "title": "用户名", "type": "string" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "lastLoginTime": { "title": "最后登录时间", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "sex": {
+            "title": "性别【f-男，m-女】",
+            "type": "string",
+            "enum": ["F", "M"]
+          },
+          "birthday": { "title": "出生日期", "type": "string" },
+          "address": { "title": "地址", "type": "string" },
+          "ownerName": { "title": "机主姓名", "type": "string" },
+          "relation": {
+            "title": "关系【father-父亲，mother-母亲】",
+            "type": "string"
+          }
+        }
+      },
+      "UserAddVM": {
+        "type": "object",
+        "properties": {
+          "username": { "title": "用户名", "type": "string" },
+          "realName": { "title": "姓名", "type": "string" },
+          "password": { "title": "密码", "type": "string" },
+          "mobile": { "title": "手机号", "type": "string" },
+          "status": {
+            "title": "状态",
+            "type": "string",
+            "description": "【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "roleIds": {
+            "title": "角色ID集合",
+            "type": "array",
+            "items": {
+              "title": "角色ID集合",
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "ResultTInteger": {
+        "type": "object",
+        "properties": {
+          "code": { "title": "状态码", "type": "integer", "format": "int32" },
+          "msg": { "title": "提示信息", "type": "string" },
+          "data": { "type": "integer", "format": "int32" }
+        }
+      },
+      "UserPageDto": {
+        "type": "object",
+        "properties": {
+          "pageNo": {
+            "title": "页数[默认0]",
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "title": "每天条数[默认10]",
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": { "title": "排序字段", "type": "string" },
+          "direction": {
+            "title": "ASC-升序,DESC-降序",
+            "type": "string",
+            "enum": ["ASC", "DESC"]
+          },
+          "userName": { "title": "账号", "type": "string" },
+          "realName": { "title": "姓名", "type": "string" },
+          "roleId": { "title": "角色ID", "type": "integer", "format": "int32" },
+          "mobile": { "title": "手机号", "type": "string" },
+          "status": {
+            "title": "状态",
+            "type": "string",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" }
+        }
+      },
+      "PageUserPageVo": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/Sort" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "last": { "type": "boolean" },
+          "first": { "type": "boolean" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UserPageVo" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "sort": { "$ref": "#/components/schemas/Sort" },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" },
+          "paged": { "type": "boolean" },
+          "unpaged": { "type": "boolean" },
+          "offset": { "type": "integer", "format": "int64" }
+        }
+      },
+      "ResultTPageUserPageVo": {
+        "type": "object",
+        "properties": {
+          "code": { "title": "状态码", "type": "integer", "format": "int32" },
+          "msg": { "title": "提示信息", "type": "string" },
+          "data": { "$ref": "#/components/schemas/PageUserPageVo" }
+        }
+      },
+      "Sort": {
+        "type": "object",
+        "properties": {
+          "sorted": { "type": "boolean" },
+          "unsorted": { "type": "boolean" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "UserPageVo": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "用户ID", "type": "integer", "format": "int32" },
+          "username": { "title": "账号", "type": "string" },
+          "realName": { "title": "姓名", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "roles": {
+            "title": "角色",
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Role" }
+          },
+          "status": {
+            "title": "状态",
+            "type": "string",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "lastLoginTime": { "title": "最后登录时间", "type": "string" },
+          "createTime": {
+            "title": "创建时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateTime": {
+            "title": "修改时间",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "角色": {
+        "required": ["accPrefix", "code", "name", "status", "type", "weight"],
+        "type": "object",
+        "properties": {
+          "id": { "title": "ID", "type": "integer", "format": "int32" },
+          "name": { "title": "角色名称", "type": "string" },
+          "code": { "title": "角色代码", "type": "string" },
+          "type": {
+            "title": "角色类型",
+            "type": "string",
+            "description": "SYSTEM: 系统角色, BUSINESS: 业务角色",
+            "enum": ["SYSTEM", "BUSINESS"]
+          },
+          "accPrefix": { "title": "角色前缀代码", "type": "string" },
+          "weight": {
+            "title": "角色权重（当用户拥有多个角色时，根据权重较大的选择相应的前缀代码）",
+            "type": "integer",
+            "format": "int32"
+          },
+          "parent": { "$ref": "#/components/schemas/角色" },
+          "subRoles": {
+            "title": "下级角色",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/角色" }
+          },
+          "status": {
+            "title": "状态",
+            "type": "string",
+            "description": "PENDING: 待激活, NORMAL: 正常, SUSPENDED: 已禁用 (默认选中NORMAL)",
+            "enum": ["PENDING", "NORMAL", "SUSPENDED"]
+          },
+          "menus": {
+            "title": "角色菜单",
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/MenuVo" }
+          },
+          "remark": { "title": "备注", "type": "string" }
+        },
+        "description": "角色对象"
+      },
+      "BizRespDict": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "integer", "format": "int32" },
+          "data": { "$ref": "#/components/schemas/Dict" },
+          "errors": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "integer", "format": "int32" },
+          "message": { "type": "string" }
+        }
+      },
+      "DictItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "code": { "title": "字典值CODE", "type": "string" },
+          "val": { "title": "字典值", "type": "string" },
+          "pinyin": { "title": "拼音首字母【大写】", "type": "string" },
+          "dict": { "$ref": "#/components/schemas/Dict" },
+          "parent": { "$ref": "#/components/schemas/DictItem" },
+          "createdTime": { "type": "string", "format": "date-time" },
+          "lastModifiedTime": { "type": "string", "format": "date-time" }
+        }
+      },
+      "BizRespDictItem": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "integer", "format": "int32" },
+          "data": { "$ref": "#/components/schemas/DictItem" },
+          "errors": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "SysUserBO": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "username": { "type": "string" },
+          "password": { "type": "string" },
+          "realName": { "type": "string" },
+          "avatar": { "type": "string" },
+          "mobilePhone": { "type": "string" },
+          "token": { "type": "string" },
+          "openId": { "type": "string" },
+          "lastLoginTime": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "isDelete": { "type": "boolean" },
+          "createUser": { "type": "integer", "format": "int32" },
+          "createTime": { "type": "string", "format": "date-time" },
+          "updateUser": { "type": "integer", "format": "int32" },
+          "updateTime": { "type": "string", "format": "date-time" },
+          "roles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "integer", "format": "int32" }
+          },
+          "schoolId": { "type": "integer", "format": "int32" },
+          "schoolName": { "type": "string" }
+        }
+      },
+      "TeacherUserVo": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "主键id", "type": "integer", "format": "int32" },
+          "username": { "title": "用户名", "type": "string" },
+          "password": { "title": "密码", "type": "string" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "sex": {
+            "title": "性别【f-男，m-女】",
+            "type": "string",
+            "enum": ["F", "M"]
+          },
+          "birthday": { "title": "出生日期", "type": "string" },
+          "address": { "title": "地址", "type": "string" },
+          "openId": { "title": "openId", "type": "string" },
+          "lastLoginTime": { "title": "最后登录时间", "type": "string" }
+        }
+      },
+      "StudentUserVo": {
+        "type": "object",
+        "properties": {
+          "userId": { "title": "主键id", "type": "integer", "format": "int32" },
+          "userName": { "title": "真实姓名", "type": "string" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "sex": { "title": "性别【f-男，m-女】", "type": "string" },
+          "birthday": { "title": "出生日期", "type": "string" },
+          "address": { "title": "地址", "type": "string" },
+          "token": { "title": "token", "type": "string" },
+          "lastLoginTime": { "title": "最后登录时间", "type": "string" },
+          "ownerName": { "title": "机主姓名", "type": "string" },
+          "relation": {
+            "title": "关系【father-父亲，mother-母亲】",
+            "type": "string"
+          }
+        }
+      },
+      "ParentsUserBO": {
+        "type": "object",
+        "properties": {
+          "parent": { "$ref": "#/components/schemas/SysUserBO" },
+          "students": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SysUserBO" }
+          }
+        }
+      },
+      "ResultTListUser": {
+        "type": "object",
+        "properties": {
+          "code": { "title": "状态码", "type": "integer", "format": "int32" },
+          "msg": { "title": "提示信息", "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/User" }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "主键id", "type": "integer", "format": "int32" },
+          "username": { "title": "用户名", "type": "string" },
+          "password": { "title": "密码", "type": "string" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "openId": { "title": "小程序openid", "type": "string" },
+          "lastLoginTime": { "title": "最后登录时间", "type": "string" },
+          "status": {
+            "title": "状态【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "type": "string",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "isFirst": { "title": "是否首次", "type": "boolean" },
+          "roles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Role" }
+          },
+          "createUser": {
+            "title": "创建人",
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "title": "创建时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateUser": {
+            "title": "修改人",
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateTime": {
+            "title": "修改时间",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResultTUserVO": {
+        "type": "object",
+        "properties": {
+          "code": { "title": "状态码", "type": "integer", "format": "int32" },
+          "msg": { "title": "提示信息", "type": "string" },
+          "data": { "$ref": "#/components/schemas/UserVO" }
+        }
+      },
+      "UserVO": {
+        "type": "object",
+        "properties": {
+          "id": { "title": "主键id", "type": "integer", "format": "int32" },
+          "username": { "title": "用户名", "type": "string" },
+          "realName": { "title": "真实姓名", "type": "string" },
+          "avatar": { "title": "头像", "type": "string" },
+          "mobilePhone": { "title": "手机号", "type": "string" },
+          "lastLoginTime": { "title": "最后登录时间", "type": "string" },
+          "status": {
+            "title": "状态【正常-normal，冻结-frozen，待审核-to_be_review，未通过-refused】",
+            "type": "string",
+            "enum": ["normal", "frozen", "to_be_review", "refused"]
+          },
+          "isDelete": { "title": "是否删除", "type": "boolean" },
+          "isFirst": { "title": "是否首次", "type": "boolean" },
+          "roles": {
+            "title": "角色",
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Role" }
+          },
+          "createUser": {
+            "title": "创建人",
+            "type": "integer",
+            "format": "int32"
+          },
+          "createTime": {
+            "title": "创建时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateUser": {
+            "title": "修改人",
+            "type": "integer",
+            "format": "int32"
+          },
+          "updateTime": {
+            "title": "修改时间",
+            "type": "string",
+            "format": "date-time"
+          },
+          "schoolId": {
+            "title": "学校ID",
+            "type": "integer",
+            "format": "int32"
+          },
+          "schoolName": { "title": "学校名称", "type": "string" }
+        }
+      },
+      "Page角色": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/Sort" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "last": { "type": "boolean" },
+          "first": { "type": "boolean" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/角色" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageMenu": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/Sort" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "last": { "type": "boolean" },
+          "first": { "type": "boolean" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Menu" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": { "minimum": 0, "type": "integer", "format": "int32" },
+          "size": { "minimum": 1, "type": "integer", "format": "int32" },
+          "sort": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "BizRespPageDict": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "integer", "format": "int32" },
+          "data": { "$ref": "#/components/schemas/PageDict" },
+          "errors": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "PageDict": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/Sort" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "last": { "type": "boolean" },
+          "first": { "type": "boolean" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Dict" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "BizRespPageDictItem": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "integer", "format": "int32" },
+          "data": { "$ref": "#/components/schemas/PageDictItem" },
+          "errors": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "PageDictItem": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/Sort" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "last": { "type": "boolean" },
+          "first": { "type": "boolean" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DictItem" }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "OAuth2AccessToken": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "expiration": { "type": "string", "format": "date-time" },
+          "refreshToken": { "type": "string" },
+          "additionalInformation": {
+            "type": "object",
+            "additionalProperties": { "type": "object" }
+          },
+          "tokenType": { "type": "string" },
+          "expired": { "type": "boolean" },
+          "expiresIn": { "type": "integer", "format": "int32" },
+          "value": { "type": "string" }
+        }
+      },
+      "View": {
+        "type": "object",
+        "properties": { "contentType": { "type": "string" } }
+      }
+    },
+    "securitySchemes": {
+      "Qlion-OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "authorizationUrl": "/login/oauth/authorize",
+            "tokenUrl": "/login/oauth/token",
+            "scopes": { "read": "Read From", "write": "Write To" }
+          }
+        }
+      }
+    }
+  }
+}
