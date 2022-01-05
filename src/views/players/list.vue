@@ -16,15 +16,15 @@
 
       <el-table-column width="120px" align="center" label="英雄名">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.accountname }}</span>
         </template>
       </el-table-column>
 
       <el-table-column width="120px" align="center" label="图标">
         <template slot-scope="scope">
-          <span>{{ scope.row.icon }}</span>
+          <span>{{ scope.row.avatar }}</span>
           <!-- 图片 -->
-          <img :src="scope.row.icon" alt="英雄图标" />
+          <img :src="scope.row.avatar" alt="英雄图标" />
         </template>
       </el-table-column>
 
@@ -96,7 +96,7 @@ export default class extends Vue {
   private async getList() {
     this.listLoading = true;
     const { data } = await getPlayers(this.listQuery);
-    this.list = data.items;
+    this.list = data.players;
     this.total = data.total;
     console.log(data);
     this.listLoading = false;

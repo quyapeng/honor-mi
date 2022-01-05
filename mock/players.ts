@@ -47,7 +47,7 @@ export const getPlayers = (req: Request, res: Response) => {
   );
 
   return res.json({
-    code: 200,
+    code: 20000,
     data: {
       total: mockList.length,
       players: pageList
@@ -76,7 +76,7 @@ export const getPlayer = (req: Request, res: Response) => {
 export const createPlayer = (req: Request, res: Response) => {
   const { player } = req.body;
   res.json({
-    code: 200,
+    code: 20000,
     data: {
       player
     }
